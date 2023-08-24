@@ -1,0 +1,12 @@
+version: '3'
+services:
+  client:
+    build:
+      context: ./client
+    container_name: simple_udp_client
+    depends_on:
+    - server
+  server:
+    build:
+      context: ./server
+    container_name: simple_udp_server
