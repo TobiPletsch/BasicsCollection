@@ -1,0 +1,1 @@
+cmd_/home/tobi/Desktop/udp_bonding/kernel_programm/Module.symvers :=  scripts/mod/modpost -m -a     -o /home/tobi/Desktop/udp_bonding/kernel_programm/Module.symvers -T /home/tobi/Desktop/udp_bonding/kernel_programm/modules.order -i Module.symvers -e 

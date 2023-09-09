@@ -1,0 +1,27 @@
+
+version: '3.8'
+services:
+
+  server:
+    build: 
+      context: ./server
+      dockerfile: Dockerfile.server
+    ports:
+      - "12345:12345"
+    networks: 
+      - socket_network
+    cap_add:
+      - NET_ADMIN   # allow tcpdump
+
+  client:
+    build: 
+      context: ./client
+      dockerfile: Dockerfile.client
+    depends_on: 
+      - server
+    networks: 
+      - socket_network
+
+networks:
+  socket_network:
+    driver: bridge

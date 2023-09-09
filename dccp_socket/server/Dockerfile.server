@@ -1,0 +1,21 @@
+# Use an official runtime as a parent image
+FROM gcc:latest
+
+# Install necessary packages
+RUN apt-get update && \
+    apt-get install -y tcpdump
+
+# Set the working directory in the container
+WORKDIR /usr/src/app
+
+# Copy the local server file to the container
+COPY ./server.cpp .
+
+# Compile the server program
+RUN g++ -o server server.cpp
+
+# Make port 12345 available to the world outside this container
+EXPOSE 12345
+
+# Run server.cpp when the container launches
+CMD ["./server"]

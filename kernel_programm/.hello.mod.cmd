@@ -1,0 +1,1 @@
+cmd_/home/tobi/Desktop/udp_bonding/kernel_programm/hello.mod := printf '%s\n'   hello.o | awk '!x[$$0]++ { print("/home/tobi/Desktop/udp_bonding/kernel_programm/"$$0) }' > /home/tobi/Desktop/udp_bonding/kernel_programm/hello.mod

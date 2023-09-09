@@ -1,0 +1,17 @@
+# Use an official runtime as a parent image
+FROM gcc:latest
+
+# Install necessary packages
+RUN apt-get update && 
+
+# Set the working directory in the container
+WORKDIR /usr/src/app
+
+# Copy the local client file to the container
+COPY ./client.cpp .
+
+# Compile the client program
+RUN g++ -o client client.cpp
+
+# Command to run the client program
+CMD ["./client"]

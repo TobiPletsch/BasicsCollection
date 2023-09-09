@@ -1,0 +1,1 @@
+cmd_/home/tobi/Desktop/udp_bonding/kernel_programm/hello.ko := ld -r -m elf_x86_64 -z noexecstack --build-id=sha1  -T scripts/module.lds -o /home/tobi/Desktop/udp_bonding/kernel_programm/hello.ko /home/tobi/Desktop/udp_bonding/kernel_programm/hello.o /home/tobi/Desktop/udp_bonding/kernel_programm/hello.mod.o;  true
