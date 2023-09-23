@@ -8,6 +8,10 @@
 int main() {
     // Create a socket
     int clientSocket = socket(AF_INET, SOCK_DGRAM, 0);
+    if (clientSocket < 0) {
+        perror("Socket creation error");
+        return 1;
+    }
 
     // Server address configuration
     struct hostent *server = gethostbyname("server"); // Use the service name

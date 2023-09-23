@@ -1,0 +1,56 @@
+#!/bin/bash
+
+function install_server {
+    g++ mpdccp_server.cpp -o server
+    ./server
+}
+
+function install_client {
+    g++ mpdccp_client.cpp -o client
+    sleep 1
+    ./client
+}
+
+function install_router {
+    g++ mpdccp_router.cpp -o router
+    ./router
+}
+
+function uninstall_server {
+    sudo ip link flush ens192
+}
+
+function uninstall_client {
+    sudo ip link flush ens192
+    sudo ip link flush ens224
+}
+
+function uninstall_router {
+    sudo ip link delete ens192
+    sudo ip link delete ens224
+    sudo ip link delete ens256
+}
+
+if [ "$1" == "install" ]; then
+    if [ "$2" == "server" ]; then
+        install_server
+    elif [ "$2" == "client" ]; then
+        install_client
+    elif [ "$2" == "router" ]; then
+        install_router
+    else
+        echo "Invalid argument. Usage: mpdccp install [server|client]"
+    fi
+elif [ "$1" == "uninstall" ]; then
+    if [ "$2" == "server" ]; then
+        uninstall_server
+    elif [ "$2" == "client" ]; then
+        uninstall_client
+    elif [ "$2" == "router" ]; then
+        uninstall_router
+    else
+        echo "Invalid argument. Usage: mpdccp uninstall [server|client]"
+    fi
+else
+    echo "Invalid command. Usage: mpdccp [install|uninstall] [server|client]"
+fi

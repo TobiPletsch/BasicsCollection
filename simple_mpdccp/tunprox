@@ -1,0 +1,50 @@
+    #!/bin/bash
+
+    function print_usage {
+        echo "Usage: $0 <local_ip> <remote_ip> <peering_ip>"
+        echo "Usage: $0 <c-tp0 | c-tp1 | s-tp0>"
+        exit 1
+    }
+
+    function setup_c_tp0 {
+        sudo ldt new tp0 # Create tunnel interface
+        sudo ldt newtun tp0 -T mpdccp 	# Setup MP-DCCP socket
+        sudo ldt setmtu tp0 -m 1300
+        sudo ldt tunbind tp0 -b 192.168.100.10:1337 	# Bind socket to any local interface
+        sudo ldt setpeer tp0 -r 192.168.102.10:1337 	# Initiaite connection establishment with remote peer
+        sudo ip address add 10.0.42.2 dev tp0 peer 10.0.42.1 	# Assing IP address to the tunnel interface
+        sudo ip link set up dev tp0
+    }
+
+    function setup_c_tp1 {
+        sudo ldt new tp1 # Create tunnel interface
+        sudo ldt newtun tp1 -T mpdccp 	# Setup MP-DCCP socket
+        sudo ldt setmtu tp1 -m 1300
+        sudo ldt tunbind tp1 -b 192.168.101.10:1337 	# Bind socket to any local interface
+        sudo ldt setpeer tp1 -r 192.168.102.10:1337 	# Initiaite connection establishment with remote peer
+        sudo ip address add 10.0.42.3 dev tp1 peer 10.0.42.1 	# Assing IP address to the tunnel interface
+        sudo ip link set up dev tp1
+    }
+
+    function setup_s_tp0 {
+        sudo ldt new tp0 	# Create tunnel interface
+        sudo ldt newtun tp0 -T mpdccp 	# Setup MP-DCCP socket
+        sudo ldt setmtu tp0 -m 1300
+        sudo ldt tunbind tp0 -b 192.168.102.10:1337 	# Bind socket to the locat IP address intended to accept the connections
+        sudo ldt serverstart tp0
+        sudo ip address add 10.0.42.1 dev tp0 peer 10.0.42.2 	# Assing IP address to the tunnel interface
+        sudo ip address add 10.0.42.3 dev tp0 peer 10.0.42.2 	# Assing IP address to the tunnel interface
+        sudo ip link set up dev tp0
+    }
+
+
+    # Argument and function calling logic
+    if [ "$1" = "c-tp0" ] && [ $# -eq 1 ]; then
+    setup_c_tp0
+    elif [ "$1" = "c-tp1" ] && [ $# -eq 1 ]; then
+    setup_c_tp1
+    elif [ "$1" = "s-tp0" ] && [ $# -eq 1 ]; then
+    setup_s_tp0
+    else
+    print_usage
+    fi
